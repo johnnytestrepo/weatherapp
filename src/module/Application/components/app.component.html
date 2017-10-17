@@ -1,0 +1,13 @@
+<div class="ui-g">
+  <div class="ui-g-8">
+    <p-panel header="Wather map">
+      <p-gmap [options]="options" (onMapClick)="handleMapClick($event)" [style]="{'width':'100%','height':'400px'}"></p-gmap>
+    </p-panel>
+  </div>
+
+  <div class="ui-g-4">
+    <p-panel header="Map data">
+      Content
+    </p-panel>
+  </div>
+</div>
