@@ -4,7 +4,10 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {PanelModule} from 'primeng/primeng';
 import {GMapModule} from 'primeng/primeng';
+import {FieldsetModule} from 'primeng/primeng';
 import {HttpClientModule} from '@angular/common/http';
+import {ChartModule} from 'primeng/primeng';
+import {DropdownModule} from 'primeng/primeng';
 
 // Components
 import {AppComponent} from './components/app.component';
@@ -19,6 +22,9 @@ import {AppComponent} from './components/app.component';
         PanelModule,
         GMapModule,
         HttpClientModule,
+        FieldsetModule,
+        ChartModule,
+        DropdownModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

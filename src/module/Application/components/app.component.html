@@ -7,7 +7,30 @@
 
   <div class="ui-g-4">
     <p-panel header="Map data">
-      Content
+      <div class="ui-row">
+        <p-fieldset legend="Data">
+          <table>
+            <tr>
+              <th>Place</th>
+              <td>{{weather?.name}}</td>
+            </tr>
+          </table>
+        </p-fieldset>
+      </div>
+
+      <div class="ui-row">
+        <p-fieldset legend="Chart" [toggleable]="true" [collapsed]="chartFieldsetCollapse">
+          <p-dropdown [options]="periods" (ngModel)="selectedPeriod"></p-dropdown>
+
+          <p-chart type="line" [data]="chartData"></p-chart>
+        </p-fieldset>
+      </div>
+
+      <div class="ui-row">
+        <p-fieldset legend="Response" [toggleable]="true" [collapsed]="responseFieldsetCollapse">
+          <pre>{{weather | json}}</pre>
+        </p-fieldset>
+      </div>
     </p-panel>
   </div>
 </div>
