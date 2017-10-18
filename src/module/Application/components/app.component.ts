@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MapOptions} from '../models/mapOptionsModel';
-import 'rxjs/add/operator/map';
-import {HttpClient} from "@angular/common/http";
+import {ApiService} from '../services/api-service';
 
 @Component({
     selector: 'app-root',
@@ -24,7 +23,9 @@ export class AppComponent implements OnInit {
 
     public chartData: any;
 
-    constructor(private http: HttpClient) {
+    constructor(
+        private api: ApiService
+    ) {
         this.periods.push({label: 'Select City', value: null});
         this.periods.push({label: 'New York', value: {id: 1, name: 'New York', code: 'NY'}});
 
@@ -58,14 +59,22 @@ export class AppComponent implements OnInit {
         this.selectedPosition = event.latLng;
         this.loading = true;
 
+        let request: any = {
+            url: 'http://api.openweathermap.org/data/2.5/weather',
+            params: {
+                'lat': this.selectedPosition.lat(),
+                'lng': this.selectedPosition.lng(),
+            }
+        };
+
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
         headers.append('X-Requested-With', 'XMLHttpRequest');
 
-        this.http.get(`http://api.openweathermap.org/data/2.5/weather?lat=${this.selectedPosition.lat()}&lon=${this.selectedPosition.lng()}&appid=${this.appid}`).subscribe(data => {
+        /*this.http.get(`http://api.openweathermap.org/data/2.5/weather?lat=${this.selectedPosition.lat()}&lon=${this.selectedPosition.lng()}&appid=${this.appid}`).subscribe(data => {
             this.weather = data;
             this.loading = false;
-        });
+        });*/
     }
 
 }
