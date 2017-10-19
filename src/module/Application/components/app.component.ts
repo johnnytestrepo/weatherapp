@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
         this.getInfoByCoord(center);
     }
 
-    public getInfoByCoord(coord: MapCenter): Promise<never | any> {
+    public getInfoByCoord(coord: MapCenter): void {
         let request: ApiRequest = {
             url: 'http://api.openweathermap.org/data/2.5/forecast',
             params: {
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
             }
         };
 
-        return this.api.sendRequest(request).then((data: any) => {
+        this.api.sendRequest(request).then((data: any) => {
             this.data = data;
             this.generateChartData();
         });
