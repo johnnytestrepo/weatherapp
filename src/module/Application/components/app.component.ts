@@ -1,80 +1,87 @@
 import {Component, OnInit} from '@angular/core';
 import {MapOptions} from '../models/mapOptionsModel';
 import {ApiService} from '../services/api-service';
+import {ApiRequest} from '../models/apiRequest';
+import {MapCenter} from '../models/mapCenterModel';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
 
-    private appid: string = '8eb54ecef33481c1cc88634695d774e4';
     public options: MapOptions;
+    public collapse: any = {
+        weather: true,
+        chart: true,
+        response: true
+    };
     private selectedPosition: any;
-
-    public chartFieldsetCollapse: boolean = true;
-    public responseFieldsetCollapse: boolean = true;
-
-    public loading: boolean = true;
-    public weather: any;
-    public periods: any[] = [];
-    public selectedPeriod: any;
-
+    public data: any = [];
     public chartData: any;
 
-    constructor(
-        private api: ApiService
-    ) {
-        this.periods.push({label: 'Select City', value: null});
-        this.periods.push({label: 'New York', value: {id: 1, name: 'New York', code: 'NY'}});
-
-        this.chartData = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-                {
-                    label: 'First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    borderColor: '#4bc0c0'
-                },
-                {
-                    label: 'Second Dataset',
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    fill: false,
-                    borderColor: '#565656'
-                }
-            ]
-        };
+    constructor(private api: ApiService) {
     }
 
-    public ngOnInit() {
+    public ngOnInit(): void {
+        const center = {lat: 36.890257, lng: 30.707417};
         this.options = {
-            center: {lat: 36.890257, lng: 30.707417},
+            center: center,
             zoom: 12
         };
+
+        this.getInfoByCoord(center);
     }
 
-    public handleMapClick(event) {
-        this.selectedPosition = event.latLng;
-        this.loading = true;
-
-        let request: any = {
-            url: 'http://api.openweathermap.org/data/2.5/weather',
+    public getInfoByCoord(coord: MapCenter): Promise<never | any> {
+        let request: ApiRequest = {
+            url: 'http://api.openweathermap.org/data/2.5/forecast',
             params: {
-                'lat': this.selectedPosition.lat(),
-                'lng': this.selectedPosition.lng(),
+                'lat': coord.lat,
+                'lon': coord.lng,
             }
         };
 
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-        headers.append('X-Requested-With', 'XMLHttpRequest');
+        return this.api.sendRequest(request).then((data: any) => {
+            this.data = data;
+            this.generateChartData();
+        });
+    }
 
-        /*this.http.get(`http://api.openweathermap.org/data/2.5/weather?lat=${this.selectedPosition.lat()}&lon=${this.selectedPosition.lng()}&appid=${this.appid}`).subscribe(data => {
-            this.weather = data;
-            this.loading = false;
-        });*/
+    public generateChartData(): void {
+        let chartLabels = [];
+        let chartValuesTemp = [];
+        let chartValuesWind = [];
+
+        this.data.list.map((item) => {
+            chartLabels.push(item.dt_txt);
+            chartValuesTemp.push(item.main.temp);
+            chartValuesWind.push(item.wind.speed);
+        });
+
+        this.chartData = {
+            labels: chartLabels,
+            datasets: [{
+                label: 'Temp',
+                data: chartValuesTemp,
+                fill: false,
+                borderColor: '#4bc0c0'
+            }, {
+                label: 'Wind speed',
+                data: chartValuesWind,
+                fill: false,
+                borderColor: '#4b3450'
+            }]
+        };
+    }
+
+    public handleMapClick(event): void {
+        this.selectedPosition = event.latLng;
+        this.getInfoByCoord({
+            lat: this.selectedPosition.lat(),
+            lng: this.selectedPosition.lng(),
+        });
     }
 
 }

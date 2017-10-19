@@ -1,4 +1,4 @@
-import {MapCenter} from "./mapCenterModel";
+import {MapCenter} from './mapCenterModel';
 
 export class MapOptions {
     constructor(

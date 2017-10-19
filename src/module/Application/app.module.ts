@@ -2,15 +2,14 @@
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {PanelModule} from 'primeng/primeng';
-import {GMapModule} from 'primeng/primeng';
-import {FieldsetModule} from 'primeng/primeng';
-import {HttpClientModule} from '@angular/common/http';
-import {ChartModule} from 'primeng/primeng';
-import {DropdownModule} from 'primeng/primeng';
+import {JsonpModule} from '@angular/http';
+import {DataListModule, DataTableModule, DropdownModule, ChartModule, FieldsetModule, GMapModule, PanelModule} from 'primeng/primeng';
 
 // Components
 import {AppComponent} from './components/app.component';
+
+// Providers
+import {ApiService} from './services/api-service';
 
 @NgModule({
     declarations: [
@@ -21,12 +20,16 @@ import {AppComponent} from './components/app.component';
         BrowserModule,
         PanelModule,
         GMapModule,
-        HttpClientModule,
         FieldsetModule,
         ChartModule,
         DropdownModule,
+        JsonpModule,
+        DataListModule,
+        DataTableModule,
     ],
-    providers: [],
+    providers: [
+        ApiService
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {
