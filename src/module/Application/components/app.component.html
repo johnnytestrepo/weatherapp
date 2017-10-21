@@ -8,30 +8,50 @@
     <div class="ui-g-4">
         <p-panel header="Info">
             <div class="ui-row" *ngIf="data">
-                <table>
-                    <tr>
-                        <td>City:</td>
-                        <td>{{data?.city?.name}}</td>
-                    </tr>
-                    <tr>
-                        <td>Country:</td>
-                        <td>{{data?.city?.country}}</td>
-                    </tr>
-                </table>
+                <p-dropdown [options]="types" [(ngModel)]="selectedType" (onChange)="getInfoByCoord()"></p-dropdown>
+
+                <div class="ui-datatable info-table">
+                    <table>
+                        <tbody class="ui-datatable-data">
+                        <tr class="ui-datatable-even ui-widget-content">
+                            <td>City:</td>
+                            <td>{{data?.city?.name || data?.name}} <em *ngIf="data.city">({{data?.city?.country}})</em></td>
+                        </tr>
+                        </tbody>
+                        <tbody class="ui-datatable-data" *ngIf="selectedType == 'weather'">
+                        <tr class="ui-datatable-odd ui-widget-content">
+                            <td>Temperature:</td>
+                            <td>{{data?.main?.temp}}</td>
+                        </tr>
+                        <tr class="ui-datatable-even ui-widget-content">
+                            <td>Wind speed:</td>
+                            <td>{{data?.wind?.speed}}</td>
+                        </tr>
+                        <tr class="ui-datatable-even ui-widget-content">
+                            <td>Humidity:</td>
+                            <td>{{data?.main?.humidity}}</td>
+                        </tr>
+                        <tr class="ui-datatable-odd ui-widget-content">
+                            <td>Pressure:</td>
+                            <td>{{data?.main?.pressure}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <div class="ui-row">
-                <p-fieldset legend="Weather" [toggleable]="true" [collapsed]="collapse.weather">
+            <div class="ui-row" *ngIf="selectedType == 'forecast'">
+                <p-fieldset legend="Chart" [toggleable]="true" [collapsed]="collapse.chart">
+                    <p-dropdown [options]="chartOptions" [(ngModel)]="selectedChartData" (onChange)="generateChartData()"></p-dropdown>
+
+                    <div class="chart-container">
+                        <p-chart type="line" [data]="chartData"></p-chart>
+                    </div>
+
                     <p-dataTable #dt [value]="data.list">
                         <p-column field="dt_txt" header="Date"></p-column>
                         <p-column field="weather.0.main" header="Weather"></p-column>
                     </p-dataTable>
-                </p-fieldset>
-            </div>
-
-            <div class="ui-row">
-                <p-fieldset legend="Chart" [toggleable]="true" [collapsed]="collapse.chart">
-                    <p-chart type="line" [data]="chartData"></p-chart>
                 </p-fieldset>
             </div>
 

@@ -4,6 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {JsonpModule} from '@angular/http';
 import {DataListModule, DataTableModule, DropdownModule, ChartModule, FieldsetModule, GMapModule, PanelModule} from 'primeng/primeng';
+import {FormsModule} from '@angular/forms';
 
 // Components
 import {AppComponent} from './components/app.component';
@@ -13,7 +14,7 @@ import {ApiService} from './services/api-service';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
     ],
     imports: [
         BrowserAnimationsModule,
@@ -26,9 +27,10 @@ import {ApiService} from './services/api-service';
         JsonpModule,
         DataListModule,
         DataTableModule,
+        FormsModule,
     ],
     providers: [
-        ApiService
+        ApiService,
     ],
     bootstrap: [AppComponent]
 })
